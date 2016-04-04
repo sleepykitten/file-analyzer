@@ -61,7 +61,6 @@ class FileAnalyzer( object ):
 		parser = argparse.ArgumentParser( description = "Simple tool that searches files for matches to custom PCRE patterns." )
 		parser.add_argument( "-p", "--path", help = "Absolute file/directory path that should be analyzed", required = False )
 		arguments = vars( parser.parse_args() )
-
 		# Checks whether the path is provided as an argument
 		if arguments[ "path" ]:
 			provided_path = arguments[ "path" ]
@@ -71,7 +70,6 @@ class FileAnalyzer( object ):
 				print( "No path argument provided, using path from settings.py." )
 			else:
 				provided_path = input( "Absolute file/directory path that should be analyzed: " )
-
 		provided_path_exists = os.path.exists( provided_path )
 		if provided_path_exists == True:
 			self.provided_path = provided_path
@@ -129,19 +127,16 @@ class FileAnalyzer( object ):
 			# Aggregates found patterns
 			self.results_found_patterns = { x: self.results_found_patterns.get( x, 0 ) + file_found_patterns.get( x, 0 ) for x in set( self.results_found_patterns ).union( file_found_patterns ) } # Combines dictionaries
 			file_found_patterns_string = self.get_string_from_dict( self.get_dictionary_sorted_by_key( file_found_patterns ) )
-
 		# Removes part of the path
 		file_path_shortened = file_path.replace( self.provided_path, "")
 		if not file_path_shortened:
 			file_path_shortened = file_path
-
 		self.results_output += "%s: %s \n" % ( file_path_shortened, file_found_patterns_string )
 		for key, value in file_results.items():
-			patterns_string = ""
+			found_patterns = []
 			for pattern in file_results[ key ][ "patterns" ]:
 				line_contents = file_results[ key ][ "line" ]
-				patterns_string += pattern + ", "
-				patterns_string = patterns_string[ :-2 ] # Removes last comma and space
+				found_patterns.append( pattern ) 
 				# Remove line breaks
 				if line_contents.endswith( "\n" ):
 					line_contents = line_contents[ :-1 ]
@@ -149,7 +144,7 @@ class FileAnalyzer( object ):
 					line_contents = line_contents[ :-1 ]
 				elif line_contents.endswith( "\r\n" ):
 					line_contents = line_contents[ :-2 ]
-			self.results_output +=	" " * 3 + "%d: %s\n" % ( key, patterns_string )
+			self.results_output +=	" " * 3 + "%d: %s\n" % ( key, ', '.join( map( str, found_patterns ) ) )
 			self.results_output +=	" " * 3 + "%s\n" % line_contents
 
 	def show_results( self ):
