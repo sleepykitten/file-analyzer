@@ -30,9 +30,6 @@ Found patterns: URL (200), swf (1)
    27: URL
    defined( 'JETPACK_PROTECT__API_HOST' )       or define( 'JETPACK_PROTECT__API_HOST', 'https://api.bruteprotect.com/' );
 /class.media-summary.php: URL (12), swf (1) 
-   63: swfURL
+   63: swf, URL
    							$return['video'] = esc_url_raw( 'http://s0.videopress.com/player.swf?guid=' . $extract['shortcode']['wpvideo']['id'][0] . '&isDynamicSeeking=true' );
-/class.jetpack-client.php: URL (1) 
-   279: URL
-   			'url'     => sprintf( '%s://%s/rest/v%s/%s', $proto, JETPACK__WPCOM_JSON_API_HOST, $version, $_path ),
 ```
